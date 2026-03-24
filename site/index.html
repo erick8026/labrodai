@@ -161,21 +161,24 @@
     .hero { padding: 86px 0 72px; }
 
     .hero-grid {
-      display: grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 34px;
-      align-items: center;
+      display: flex;
+      justify-content: center;
+    }
+
+    .hero-copy {
+      max-width: 720px;
+      width: 100%;
     }
 
     .hero h1 {
       font-size: clamp(2.4rem, 5vw, 4.3rem);
-      max-width: 12ch;
+      max-width: none;
     }
 
     .hero-text {
       font-size: 1.08rem;
       max-width: 60ch;
-      margin: 18px 0 28px;
+      margin: 18px auto 28px;
     }
 
     .hero-actions {
@@ -375,6 +378,10 @@
       align-items: start;
     }
 
+    .sector-detail.hidden {
+      display: none;
+    }
+
     .sector-detail-copy h3 {
       margin: 0 0 12px;
       font-size: clamp(1.7rem, 3vw, 2.3rem);
@@ -494,11 +501,10 @@
   <main>
     <section class="hero" id="inicio">
       <div class="container hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow" data-i18n="eyebrow">Automatización de ventas por WhatsApp con IA</p>
+        <div class="hero-copy" style="text-align:center; align-items:center;">
           <h1 data-i18n="heroTitle">Convierte conversaciones en ventas automáticas para tu negocio.</h1>
           <p class="hero-text" data-i18n="heroText">RODAI ayuda a tu negocio a atender clientes, agendar citas y generar oportunidades por WhatsApp, incluso cuando no estás disponible.</p>
-          <div class="hero-actions">
+          <div class="hero-actions" style="justify-content:center;">
             <a class="btn btn-primary" href="https://wa.me/50363143273" target="_blank" rel="noopener" data-i18n="heroCTA1">Hablar por WhatsApp</a>
             <a class="btn btn-secondary" href="#sectores" data-i18n="heroCTA2">Ver para quién es</a>
           </div>
@@ -543,7 +549,7 @@
 
         <div class="sectors-shell">
           <div class="sector-carousel" id="sectorCarousel">
-            <button class="sector-card active" data-sector="doctor" type="button">
+            <button class="sector-card" data-sector="doctor" type="button">
               <img src="assets/doctor.webp" alt="Doctor" />
               <div class="sector-card-body"><h3 data-i18n="sectorDoctor">Doctor/a</h3></div>
             </button>
@@ -575,7 +581,7 @@
           </div>
         </div>
 
-        <div class="sector-detail" id="sectorDetail">
+        <div class="sector-detail hidden" id="sectorDetail">
           <div class="sector-detail-copy">
             <h3 id="sectorTitle">LÍA para doctores y consultorios</h3>
             <p id="sectorDescription">LÍA te ayuda a responder a tus pacientes al instante, organizar tus citas y evitar que pierdas consultas por no responder a tiempo.</p>
@@ -1018,7 +1024,8 @@
     };
 
     let currentLang = "es";
-    let currentSector = "doctor";
+    let currentSector = null;
+    const sectorDetail = document.getElementById("sectorDetail");
 
     const toggle = document.getElementById("langToggle");
     const carousel = document.getElementById("sectorCarousel");
@@ -1038,11 +1045,12 @@
         }
       });
       toggle.textContent = lang === "es" ? "EN" : "ES";
-      renderSector(currentSector);
+      if (currentSector) renderSector(currentSector);
     }
 
     function renderSector(key) {
       currentSector = key;
+      sectorDetail.classList.remove("hidden");
       const data = sectorData[key][currentLang];
 
       titleEl.textContent = data.title;
@@ -1069,10 +1077,7 @@
     }
 
     cards.forEach(card => {
-      const activate = () => renderSector(card.dataset.sector);
-      card.addEventListener("click", activate);
-      card.addEventListener("mouseenter", activate);
-      card.addEventListener("focus", activate);
+      card.addEventListener("click", () => renderSector(card.dataset.sector));
     });
 
     toggle.addEventListener("click", () => {
@@ -1115,7 +1120,6 @@
     }, { passive: true });
 
     renderTexts(currentLang);
-    renderSector(currentSector);
     rafId = requestAnimationFrame(tickCarousel);
   </script>
 </body>
