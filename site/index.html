@@ -346,6 +346,24 @@
       outline: none;
     }
 
+    .sector-card .sector-hover-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(0deg, rgba(10,15,40,0.92), transparent);
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-align: center;
+      padding: 18px 10px 10px;
+      opacity: 0;
+      transition: opacity .2s ease;
+      pointer-events: none;
+    }
+
+    .sector-card:hover .sector-hover-label {
+      opacity: 1;
+    }
+
     .sector-card.active {
       border-color: rgba(143,76,255,0.65);
       box-shadow: 0 22px 56px rgba(10,20,55,0.58), 0 0 0 1px rgba(143,76,255,0.22);
@@ -1077,7 +1095,14 @@
     }
 
     cards.forEach(card => {
-      card.addEventListener("click", () => renderSector(card.dataset.sector));
+      const key = card.dataset.sector;
+      // Hover label — shows just the LÍA title on mouseenter
+      const label = document.createElement("span");
+      label.className = "sector-hover-label";
+      label.textContent = sectorData[key]["es"].title;
+      card.appendChild(label);
+
+      card.addEventListener("click", () => renderSector(key));
     });
 
     toggle.addEventListener("click", () => {
