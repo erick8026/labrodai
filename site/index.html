@@ -1050,7 +1050,7 @@
         ctaEyebrow: "Ready for a demo",
         ctaTitle: "Request a demo and discover how LÍA can help your business.",
         ctaButton: "Request demo",
-        footerText: "AI-powered WhatsApp sales automation.",
+        footerText: "LÍA works for your business, even when you can't.",
         footerContact: "Contact"
       }
     };
@@ -1077,6 +1077,10 @@
         }
       });
       toggle.textContent = lang === "es" ? "EN" : "ES";
+      document.querySelectorAll(".sector-hover-label").forEach(label => {
+        const key = label.closest("[data-sector]").dataset.sector;
+        label.textContent = sectorData[key][lang].title;
+      });
       if (currentSector) renderSector(currentSector);
     }
 
@@ -1113,7 +1117,7 @@
       // Hover label — shows just the LÍA title on mouseenter
       const label = document.createElement("span");
       label.className = "sector-hover-label";
-      label.textContent = sectorData[key]["es"].title;
+      label.textContent = sectorData[key][currentLang].title;
       card.appendChild(label);
 
       card.addEventListener("click", () => renderSector(key));
